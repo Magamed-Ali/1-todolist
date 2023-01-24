@@ -21,14 +21,14 @@ function App() {
     const removeTask = (taskId: string) => {
         setTask_1(task_1.filter(item => item.id !== taskId))
     }
-
-    //
+    const checkboxRemove = (IdIsDone: string, oppositeIsDone: boolean) => {
+        setTask_1(task_1.map(t => t.id === IdIsDone ? {...t, isDone: oppositeIsDone} : t))
+    }
 
     const addDateTask = (title:string) => {
         const newTask =  {id: v1(), title: title, isDone: false}
         setTask_1([...task_1, newTask])
     }
-    //
 
     const [filter, setFilter] = useState<FilterValueType>("all")
     const changeFilter = (filter: FilterValueType) => {
@@ -68,6 +68,7 @@ function App() {
                 tasks={filtredTasksForRender}
                 changeFilter={changeFilter}
                 addDateTask={addDateTask}
+                checkboxRemove={checkboxRemove}
 
             />
 
