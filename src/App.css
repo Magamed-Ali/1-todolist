@@ -6,3 +6,22 @@
 .App > div {
   margin-right: 50px;
 }
+.titleCrossOut {
+  text-decoration: line-through;
+}
+.titleTransparent{
+  opacity: .5;
+}
+
+.activeButton {
+  background-color: chartreuse;
+}
+
+.errorText{
+  color: red;
+}
+
+.app{
+  display: flex;
+  justify-content: center;
+}
