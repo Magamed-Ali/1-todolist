@@ -18,6 +18,9 @@ function App() {
         {id: v1(), title: "HTML", isDone: false},
         {id: v1(), title: "JS/TS", isDone: false}])
 
+    const changeTaskStatus = (taskId: string, newStatus: boolean) => {
+        setTask_1(task_1.map((t) => t.id === taskId ? {...t, isDone: newStatus} : t))
+    }
     const removeTask = (taskId: string) => {
         setTask_1(task_1.filter(item => item.id !== taskId))
     }
@@ -68,7 +71,9 @@ function App() {
                 tasks={filtredTasksForRender}
                 changeFilter={changeFilter}
                 addDateTask={addDateTask}
-                checkboxRemove={checkboxRemove}
+                changeTaskStatus={changeTaskStatus}
+                filter={filter}
+
 
             />
 

@@ -6,3 +6,31 @@
 .App > div {
   margin-right: 50px;
 }
+
+.task-done{
+  text-decoration: line-through;
+}
+
+.task-doneOf{
+  opacity: .5;
+}
+
+.btn-actve{
+  color: black;
+  background-color: aqua;
+  border-radius: 3px;
+  border: 1px solid #ff0000;
+}
+
+.btn-actve:focus{
+  border: 1px solid #575353;
+}
+
+.error-input{
+  border: 1px solid red;
+  box-sizing: border-box;
+}
+
+.errorRe{
+  color: red;
+}
