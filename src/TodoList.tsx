@@ -4,12 +4,13 @@ import React, {ChangeEvent, ChangeEventHandler, KeyboardEvent, useRef, useState}
 import {FilterValueType} from "./App";
 
 type TodoListPropsType = {
+    IDTodolist: string
     title: string,
     filter: FilterValueType,
     tasks: Array<TaskType>
     removeTask: (taskId: string) => void
-    changeFilter: (filter: FilterValueType) => void
-    addDateTask: (item: string) => void
+    changeFilter: (IDTodolist: string, filter: FilterValueType) => void
+    addDateTask: (IDTodolist: string, item: string) => void
 
     changeTaskStatus: (id: string, status: boolean) => void
 
@@ -71,7 +72,7 @@ function TodoList(props: TodoListPropsType) {
     const addTask = ()=> {
         const trimmedTitle = titleInput.trim()
         if(trimmedTitle !== ""){
-            props.addDateTask(titleInput)
+            props.addDateTask(props.IDTodolist, titleInput)
         }else {
             setError(true)
         }
@@ -88,8 +89,8 @@ function TodoList(props: TodoListPropsType) {
     }
     ////
 
-    const handlerCreator = (filter: FilterValueType) => {
-        return () => props.changeFilter(filter);
+    const handlerCreator = (IDTodolist: string, filter: FilterValueType) => {
+        return () => props.changeFilter(props.IDTodolist, filter);
     }
     return (
         <div>
@@ -125,9 +126,9 @@ function TodoList(props: TodoListPropsType) {
 
                 </div>
                 <div>
-                    <button className={props.filter === "all"  ? "btn-actve" : ""} onClick={handlerCreator("all")}>All</button>
-                    <button className={props.filter === "active"  ? "btn-actve" : ""} onClick={handlerCreator("active")}>Active</button>
-                    <button className={props.filter === "completed"  ? "btn-actve" : ""} onClick={handlerCreator("completed")}>Completed</button>
+                    <button className={props.filter === "all"  ? "btn-actve" : ""} onClick={handlerCreator(props.IDTodolist, "all")}>All</button>
+                    <button className={props.filter === "active"  ? "btn-actve" : ""} onClick={handlerCreator(props.IDTodolist, "active")}>Active</button>
+                    <button className={props.filter === "completed"  ? "btn-actve" : ""} onClick={handlerCreator(props.IDTodolist, "completed")}>Completed</button>
                 </div>
                 <ul>
                     {tasksList}

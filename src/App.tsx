@@ -1,44 +1,85 @@
 import React, {useState} from 'react';
-import { v1 } from 'uuid';
+import {v1} from 'uuid';
 import './App.css';
-import TodoList, {TaskType} from "./TodoList";
+import TodoList from "./TodoList";
 
-//yarn add @types/uuid
+
 export  type FilterValueType = "all" | "active" | "completed"
+export type TodoTasksType = {
+    id: string
+    title: string
+}
+
+type TasksType = {
+    [key: string]:
+        {
+            data: Array<TaskType1>,
+            filter: FilterValueType
+        }
+}
+
+type TaskType1 = {
+    id: string,
+    title: string,
+    isDone: boolean
+}
 
 function App() {
-    const todoListTitle_1: string = "What to learn";
-    const todoListTitle_2: string = "What to buy";
+    let TodoListID1 = v1();
+    let TodolistID2 = v1();
 
-    const [task_1, setTask_1] = useState<Array<TaskType>>([
-        {id: v1(), title: "HTML", isDone: true},
-        {id: v1(), title: "HTML", isDone: true},
-        {id: v1(), title: "JS/TS", isDone: false},
-        {id: v1(), title: "HTML", isDone: true},
-        {id: v1(), title: "HTML", isDone: false},
-        {id: v1(), title: "JS/TS", isDone: false}])
+    const [todoListTasks, setTodoListTasks] = useState<Array<TodoTasksType>>([
+        {id: TodoListID1, title: "What to learn"},
+        {id: TodolistID2, title: "What to buy"}
+    ])
+    const [task_1, setTask_1] = useState<TasksType>({
+        [TodoListID1]: {
+            data: [
+                {id: v1(), title: "HTML", isDone: true},
+                {id: v1(), title: "HTML", isDone: true},
+                {id: v1(), title: "JS/TS", isDone: false},
+                {id: v1(), title: "HTML", isDone: true},
+                {id: v1(), title: "HTML", isDone: false},
+                {id: v1(), title: "JS/TS", isDone: false}
+            ],
+            filter: "all"
+        },
+        [TodolistID2]: {
+            data: [
+                {id: v1(), title: "HTML", isDone: true},
+                {id: v1(), title: "HTML", isDone: true},
+                {id: v1(), title: "JS/TS", isDone: false},
+                {id: v1(), title: "HTML", isDone: true},
+                {id: v1(), title: "HTML", isDone: false},
+                {id: v1(), title: "JS/TS", isDone: false}
+            ],
+            filter: "completed"
+        }
+    })
 
+    const addDateTask = (IDTodolist: string, title: string) => {
+        const newTask = {id: v1(), title: title, isDone: false}
+        setTask_1({...task_1, [IDTodolist] : {...task_1[IDTodolist]}})
+
+        console.log({...task_1, [IDTodolist]: {...task_1[IDTodolist]} })
+    }
+    const changeFilter = (IDTodolist: string, filter: FilterValueType) => {
+        //****
+    }
     const changeTaskStatus = (taskId: string, newStatus: boolean) => {
-        setTask_1(task_1.map((t) => t.id === taskId ? {...t, isDone: newStatus} : t))
+        /*setTask_1(task_1.map((t) => t.id === taskId ? {...t, isDone: newStatus} : t))*/
     }
     const removeTask = (taskId: string) => {
-        setTask_1(task_1.filter(item => item.id !== taskId))
+        /*setTask_1(task_1.filter(item => item.id !== taskId))*/
     }
     const checkboxRemove = (IdIsDone: string, oppositeIsDone: boolean) => {
-        setTask_1(task_1.map(t => t.id === IdIsDone ? {...t, isDone: oppositeIsDone} : t))
+        /*setTask_1(task_1.map(t => t.id === IdIsDone ? {...t, isDone: oppositeIsDone} : t))*/
     }
 
-    const addDateTask = (title:string) => {
-        const newTask =  {id: v1(), title: title, isDone: false}
-        setTask_1([...task_1, newTask])
-    }
 
-    const [filter, setFilter] = useState<FilterValueType>("all")
-    const changeFilter = (filter: FilterValueType) => {
-        setFilter(filter)
-    }
-    const getFilterTasksRender = (tasks: Array<TaskType>, filter: FilterValueType): Array<TaskType> => {
-        let filteredTasks: any
+
+    /*const getFilterTasksRender = (tasks: Array<TaskType>, filter: FilterValueType): Array<TaskType> => {
+
         switch (filter) {
             case "active":
                 return tasks.filter(task => task.isDone === false)
@@ -46,36 +87,33 @@ function App() {
                 return tasks.filter(task => task.isDone === true)
             default:
                 return tasks
-
         }
+        const filtredTasksForRender = getFilterTasksRender(task_1[el.id])
 
-        /* if (filter === "active") {
-             return tasks.filter(task => task.isDone === false)
-         } else if (filter === "completed") {
-             return tasks.filter(task => task.isDone === true)
-         }
-         return tasks*/
-    }
+    }*/
 
-    const filtredTasksForRender = getFilterTasksRender(task_1, filter)
-    const task_2: Array<TaskType> = [
-        {id: v1(), title: "React", isDone: true},
-        {id: v1(), title: "Angular", isDone: false},
-        {id: v1(), title: "Vue", isDone: false}
-    ]
     return (
         <div className="App">
-            <TodoList
-                removeTask={removeTask}
-                title={todoListTitle_1}
-                tasks={filtredTasksForRender}
-                changeFilter={changeFilter}
-                addDateTask={addDateTask}
-                changeTaskStatus={changeTaskStatus}
-                filter={filter}
+            {
+                todoListTasks.map(el => {
 
+                    let filteredTasks = task_1[el.id].data
 
-            />
+                    return (
+                        <TodoList
+                            key={el.id}
+                            IDTodolist={el.id}
+                            removeTask={removeTask}
+                            title={el.title}
+                            tasks={filteredTasks}
+                            changeFilter={changeFilter}
+                            addDateTask={addDateTask}
+                            changeTaskStatus={changeTaskStatus}
+                            filter={task_1[el.id].filter}
+                        />
+                    )
+                })
+            }
 
             {/*<TodoList removeTask={removeTask} title={todoListTitle_2} tasks={task_2}/>*/}
         </div>
