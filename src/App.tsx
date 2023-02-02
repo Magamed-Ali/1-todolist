@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {v1} from 'uuid';
 import './App.css';
-import TodoList from "./TodoList";
+import TodoList, {TaskType} from "./TodoList";
 
 
 export  type FilterValueType = "all" | "active" | "completed"
@@ -59,17 +59,17 @@ function App() {
 
     const addDateTask = (IDTodolist: string, title: string) => {
         const newTask = {id: v1(), title: title, isDone: false}
-        setTask_1({...task_1, [IDTodolist] : {...task_1[IDTodolist]}})
-
-        console.log({...task_1, [IDTodolist]: {...task_1[IDTodolist]} })
+        setTask_1({...task_1, [IDTodolist] : {...task_1[IDTodolist], data: [...task_1[IDTodolist].data, newTask]} })
     }
     const changeFilter = (IDTodolist: string, filter: FilterValueType) => {
-        //****
+       setTask_1({...task_1, [IDTodolist]: {...task_1[IDTodolist], filter: filter}})
     }
-    const changeTaskStatus = (taskId: string, newStatus: boolean) => {
-        /*setTask_1(task_1.map((t) => t.id === taskId ? {...t, isDone: newStatus} : t))*/
+    const changeTaskStatus = (IDTodolist: string, taskId: string, newStatus: boolean) => {
+
+        setTask_1({...task_1, [IDTodolist] : {...task_1[IDTodolist], data: [...task_1[IDTodolist].data.map(el => el.id === taskId ? {...el, isDone: newStatus} : el)] } })
     }
-    const removeTask = (taskId: string) => {
+    const removeTask = (IDTodolist: string, taskId: string) => {
+        setTask_1({...task_1, [IDTodolist] : {...task_1[IDTodolist], data: [...task_1[IDTodolist].data.filter(el => el.id !== taskId)] } })
         /*setTask_1(task_1.filter(item => item.id !== taskId))*/
     }
     const checkboxRemove = (IdIsDone: string, oppositeIsDone: boolean) => {
@@ -77,8 +77,7 @@ function App() {
     }
 
 
-
-    /*const getFilterTasksRender = (tasks: Array<TaskType>, filter: FilterValueType): Array<TaskType> => {
+    const getFilterTasksRender = (tasks: Array<TaskType>, filter: FilterValueType): Array<TaskType> => {
 
         switch (filter) {
             case "active":
@@ -88,16 +87,15 @@ function App() {
             default:
                 return tasks
         }
-        const filtredTasksForRender = getFilterTasksRender(task_1[el.id])
-
-    }*/
+    }
 
     return (
         <div className="App">
             {
                 todoListTasks.map(el => {
 
-                    let filteredTasks = task_1[el.id].data
+                    /*let filteredTasks = task_1[el.id].data*/
+                    const filtredTasksForRender = getFilterTasksRender(task_1[el.id].data, task_1[el.id].filter);
 
                     return (
                         <TodoList
@@ -105,7 +103,7 @@ function App() {
                             IDTodolist={el.id}
                             removeTask={removeTask}
                             title={el.title}
-                            tasks={filteredTasks}
+                            tasks={filtredTasksForRender}
                             changeFilter={changeFilter}
                             addDateTask={addDateTask}
                             changeTaskStatus={changeTaskStatus}

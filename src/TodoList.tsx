@@ -8,11 +8,11 @@ type TodoListPropsType = {
     title: string,
     filter: FilterValueType,
     tasks: Array<TaskType>
-    removeTask: (taskId: string) => void
+    removeTask: (IDTodolist: string, taskId: string) => void
     changeFilter: (IDTodolist: string, filter: FilterValueType) => void
     addDateTask: (IDTodolist: string, item: string) => void
 
-    changeTaskStatus: (id: string, status: boolean) => void
+    changeTaskStatus: (IDTodolist: string, id: string, status: boolean) => void
 
 }
 
@@ -49,14 +49,14 @@ function TodoList(props: TodoListPropsType) {
 
     let tasksList = props.tasks.length
         ? props.tasks.map((task:TaskType) => {
-            const changeStatusEvent = (e: ChangeEvent<HTMLInputElement>)=> props.changeTaskStatus(task.id, e.currentTarget.checked )
+            const changeStatusEvent = (e: ChangeEvent<HTMLInputElement>)=> props.changeTaskStatus(props.IDTodolist, task.id, e.currentTarget.checked )
             return (
                 <li>
 
                     <input type="checkbox" checked={task.isDone} onChange={changeStatusEvent}/>
                     <span className={task.isDone ? "task-done" : "task-doneOf"}>{task.title}</span>
 
-                    <button onClick={() => removeTask(task.id)}>x</button>
+                    <button onClick={() => removeTask(props.IDTodolist, task.id)}>x</button>
                 </li>
             )
         })
