@@ -35,3 +35,17 @@
 .errorRe{
   color: red;
 }
+
+.todolist-title{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todolist-title button{
+  height: 25px;
+}
+
+.todolist-title h3 {
+ margin: 2px 0;
+}

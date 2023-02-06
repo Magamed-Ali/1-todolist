@@ -63,39 +63,51 @@ function App() {
     }
     const changeFilter = (IDTodolist: string, filter: FilterValueType) => {
        setTask_1({...task_1, [IDTodolist]: {...task_1[IDTodolist], filter: filter}})
+
     }
     const changeTaskStatus = (IDTodolist: string, taskId: string, newStatus: boolean) => {
 
-        setTask_1({...task_1, [IDTodolist] : {...task_1[IDTodolist], data: [...task_1[IDTodolist].data.map(el => el.id === taskId ? {...el, isDone: newStatus} : el)] } })
+        setTask_1({...task_1, [IDTodolist] : {...task_1[IDTodolist], data: [...task_1[IDTodolist].data.map(el => el.id === taskId ? {...el, isDone: newStatus}  : el)] } })
     }
     const removeTask = (IDTodolist: string, taskId: string) => {
         setTask_1({...task_1, [IDTodolist] : {...task_1[IDTodolist], data: [...task_1[IDTodolist].data.filter(el => el.id !== taskId)] } })
+        console.log(task_1)
         /*setTask_1(task_1.filter(item => item.id !== taskId))*/
     }
     const checkboxRemove = (IdIsDone: string, oppositeIsDone: boolean) => {
         /*setTask_1(task_1.map(t => t.id === IdIsDone ? {...t, isDone: oppositeIsDone} : t))*/
     }
 
+    const deleteTodolist = (IdIsDone: string) => {
+        setTodoListTasks(todoListTasks.filter(el => el.id !== IdIsDone))
+    }
 
-    const getFilterTasksRender = (tasks: Array<TaskType>, filter: FilterValueType): Array<TaskType> => {
+   /* const getFilterTasksRender = (tasks: Array<TaskType>, filter: FilterValueType): Array<TaskType> => {
 
         switch (filter) {
             case "active":
-                return tasks.filter(task => task.isDone === false)
+                return tasks.filter(task => !task.isDone)
             case "completed":
-                return tasks.filter(task => task.isDone === true)
+                return tasks.filter(task => task.isDone)
             default:
                 return tasks
         }
-    }
+    }*/
 
     return (
         <div className="App">
             {
                 todoListTasks.map(el => {
 
-                    /*let filteredTasks = task_1[el.id].data*/
-                    const filtredTasksForRender = getFilterTasksRender(task_1[el.id].data, task_1[el.id].filter);
+                    /*const filtredTasksForRender = getFilterTasksRender(task_1[el.id].data, task_1[el.id].filter);*/
+                    let filtredTasksForRender = task_1[el.id].data
+                    if(task_1[el.id].filter === "active"){
+                        filtredTasksForRender = task_1[el.id].data.filter((el)=>el.isDone === false)
+                    }
+                    if(task_1[el.id].filter === "completed"){
+                        filtredTasksForRender = task_1[el.id].data.filter(el => el.isDone === true )
+                    }
+
 
                     return (
                         <TodoList
@@ -108,6 +120,7 @@ function App() {
                             addDateTask={addDateTask}
                             changeTaskStatus={changeTaskStatus}
                             filter={task_1[el.id].filter}
+                            deleteTodolist={deleteTodolist}
                         />
                     )
                 })
