@@ -1,8 +1,8 @@
-
 import React, {ChangeEvent, ChangeEventHandler, KeyboardEvent, useRef, useState} from 'react';
 
 import {FilterValueType} from "./App";
 import {SuperInpit} from "./components/SuperInpit";
+import {EditableSpan} from "./components/EditableSpan";
 
 type TodoListPropsType = {
     IDTodolist: string
@@ -14,7 +14,8 @@ type TodoListPropsType = {
     addDateTask: (IDTodolist: string, item: string) => void
     deleteTodolist: (IdIsDone: string) => void
     changeTaskStatus: (IDTodolist: string, id: string, status: boolean) => void
-
+    addTitleTask: (IdTodoList: string, id: string, title: string) => void
+    addDateTask2: (IDTodolist: string, titleInput: string) => void
 }
 
 export type TaskType = {
@@ -26,9 +27,8 @@ export type TaskType = {
 function TodoList(props: TodoListPropsType) {
 
 
-
 /// Ref for input
-   /* const ref = useRef<HTMLInputElement>(null)*/
+    /* const ref = useRef<HTMLInputElement>(null)*/
 ////
 
     // let tasksList;
@@ -47,25 +47,32 @@ function TodoList(props: TodoListPropsType) {
 
     let removeTask = props.removeTask
 
+
     let tasksList = props.tasks.length
-        ? props.tasks.map((task:TaskType) => {
-            const changeStatusEvent = (e: ChangeEvent<HTMLInputElement>)=> props.changeTaskStatus(props.IDTodolist, task.id, e.currentTarget.checked )
+        ? props.tasks.map((task: TaskType) => {
+            const changeStatusEvent = (e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(props.IDTodolist, task.id, e.currentTarget.checked)
+            const editTasksHandler = (title: string) => {
+                props.addTitleTask(props.IDTodolist, task.id, title)
+            }
             return (
                 <li key={task.id}>
 
                     <input type="checkbox" checked={task.isDone} onChange={changeStatusEvent}/>
-                    <span className={task.isDone ? "task-done" : "task-doneOf"}>{task.title}</span>
-
-                    <button onClick={() => removeTask(props.IDTodolist, task.id)}>x</button>
+                    {/*<span className={task.isDone ? "task-done" : "task-doneOf"}>{task.title}</span>*/}
+                    <span className={task.isDone ? "task-done" : "task-doneOf"}>
+                    <EditableSpan
+                        title={task.title}
+                        editTasksHandler={editTasksHandler}
+                    />
+                        </span>
+                    <button onClick={() => removeTask(props.IDTodolist, task.id)}>x
+                    </button>
                 </li>
             )
         })
         : <span>Your taskslist is empty</span>
 
     ///
-
-
-
 
     ////
 
@@ -75,15 +82,22 @@ function TodoList(props: TodoListPropsType) {
     const inputAddTasks = (titleInput: string) => {
         props.addDateTask(props.IDTodolist, titleInput)
     }
+    const inputAddTodolistTitle = (titleInput: string) => {
+        props.addDateTask2(props.IDTodolist, titleInput)
+    }
+
     return (
         <div>
             <div>
                 <div className="todolist-title">
-                    <h3>{props.title}</h3>
-                    <button onClick={() => props.deleteTodolist(props.IDTodolist)} >X</button>
+                    {/*<h3>{props.title}</h3>*/}
+                    <h3>
+                        <EditableSpan title={props.title} editTasksHandler={inputAddTodolistTitle}/>
+                    </h3>
+                    <button onClick={() => props.deleteTodolist(props.IDTodolist)}>X</button>
                 </div>
 
-                <SuperInpit inputAddTasks={inputAddTasks} />
+                <SuperInpit inputAddTasks={inputAddTasks}/>
                 {/*<div>
                     <input
                         className={error ? "error-input" : ""}
@@ -114,9 +128,15 @@ function TodoList(props: TodoListPropsType) {
 
                 </div>*/}
                 <div>
-                    <button className={props.filter === "all"  ? "btn-actve" : ""} onClick={()=>handlerCreator(props.IDTodolist, "all")}>All</button>
-                    <button className={props.filter === "active"  ? "btn-actve" : ""} onClick={()=>handlerCreator(props.IDTodolist, "active")}>Active</button>
-                    <button className={props.filter === "completed"  ? "btn-actve" : ""} onClick={()=>handlerCreator(props.IDTodolist, "completed")}>Completed</button>
+                    <button className={props.filter === "all" ? "btn-actve" : ""}
+                            onClick={() => handlerCreator(props.IDTodolist, "all")}>All
+                    </button>
+                    <button className={props.filter === "active" ? "btn-actve" : ""}
+                            onClick={() => handlerCreator(props.IDTodolist, "active")}>Active
+                    </button>
+                    <button className={props.filter === "completed" ? "btn-actve" : ""}
+                            onClick={() => handlerCreator(props.IDTodolist, "completed")}>Completed
+                    </button>
                 </div>
                 <ul>
                     {tasksList}

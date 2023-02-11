@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {v1} from 'uuid';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
+import {SuperInpit} from "./components/SuperInpit";
 
 
 export  type FilterValueType = "all" | "active" | "completed"
@@ -57,6 +58,12 @@ function App() {
         }
     })
 
+    const addDateTask2 = (IDTodolist: string, titleInput: string) => {
+        setTodoListTasks(todoListTasks.map(item => item.id === IDTodolist ? {...item, title: titleInput} : item))
+    }
+    const addTitleTask = (IdTodoList : string, id: string, title: string) => {
+        setTask_1({...task_1, [IdTodoList] : {...task_1[IdTodoList], data: [...task_1[IdTodoList].data.map(item => item.id === id ? {...item, title: title} : item)]}})
+    }
     const addDateTask = (IDTodolist: string, title: string) => {
         const newTask = {id: v1(), title: title, isDone: false}
         setTask_1({...task_1, [IDTodolist] : {...task_1[IDTodolist], data: [...task_1[IDTodolist].data, newTask]} })
@@ -94,18 +101,27 @@ function App() {
         }
     }*/
 
+    const AddTodolist = (titleInput: string) => {
+        let idTodo = v1();
+        const newDataTask = [{id: v1(), title: "HTML", isDone: true}, {id: v1(), title: "HTML", isDone: false}]
+        const newTasks = {id: idTodo, title: titleInput}
+        setTodoListTasks([...todoListTasks, newTasks])
+        setTask_1({...task_1, [idTodo]: {data: newDataTask, filter: "all"}})
+
+    }
     return (
         <div className="App">
+            <SuperInpit inputAddTasks={AddTodolist} />
             {
                 todoListTasks.map(el => {
 
                     /*const filtredTasksForRender = getFilterTasksRender(task_1[el.id].data, task_1[el.id].filter);*/
                     let filtredTasksForRender = task_1[el.id].data
                     if(task_1[el.id].filter === "active"){
-                        filtredTasksForRender = task_1[el.id].data.filter((el)=>el.isDone === false)
+                        filtredTasksForRender = task_1[el.id].data.filter((el)=>!el.isDone)
                     }
                     if(task_1[el.id].filter === "completed"){
-                        filtredTasksForRender = task_1[el.id].data.filter(el => el.isDone === true )
+                        filtredTasksForRender = task_1[el.id].data.filter(el => el.isDone)
                     }
 
 
@@ -121,6 +137,8 @@ function App() {
                             changeTaskStatus={changeTaskStatus}
                             filter={task_1[el.id].filter}
                             deleteTodolist={deleteTodolist}
+                            addTitleTask={addTitleTask}
+                            addDateTask2={addDateTask2}
                         />
                     )
                 })
