@@ -122,7 +122,7 @@ function TodoList(props: TodoListPropsType) {
                                 if(ref.current){
                                     ref.current && props.addDateTask(ref.current.value)
                                     ref.current.value = ""
-                                }
+                                }git
                             }
                         }>+
                     </button>*/}
