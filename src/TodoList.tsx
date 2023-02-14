@@ -1,4 +1,5 @@
 import React, {ChangeEvent, ChangeEventHandler, KeyboardEvent, useRef, useState} from 'react';
+import Button from '@mui/material/Button';
 
 import {FilterValueType} from "./App";
 import {SuperInpit} from "./components/SuperInpit";
@@ -86,6 +87,12 @@ function TodoList(props: TodoListPropsType) {
         props.addDateTask2(props.IDTodolist, titleInput)
     }
 
+    const button = {
+        padding: "1px 4px",
+        minWidth: "50px",
+        fontSize: "12px",
+        margin: "4px 2px"
+    }
     return (
         <div>
             <div>
@@ -127,16 +134,14 @@ function TodoList(props: TodoListPropsType) {
     * /////
 
                 </div>*/}
+
                 <div>
-                    <button className={props.filter === "all" ? "btn-actve" : ""}
-                            onClick={() => handlerCreator(props.IDTodolist, "all")}>All
-                    </button>
-                    <button className={props.filter === "active" ? "btn-actve" : ""}
-                            onClick={() => handlerCreator(props.IDTodolist, "active")}>Active
-                    </button>
-                    <button className={props.filter === "completed" ? "btn-actve" : ""}
-                            onClick={() => handlerCreator(props.IDTodolist, "completed")}>Completed
-                    </button>
+                    <Button style={button} variant={props.filter === "all" ? "outlined" : "contained"} color="primary"
+                            onClick={() => handlerCreator(props.IDTodolist, "all")}>All</Button>
+                    <Button style={button} variant={props.filter === "active" ? "outlined" : "contained"} color="success"
+                            onClick={() => handlerCreator(props.IDTodolist, "active")}>Active</Button>
+                    <Button style={button} variant={props.filter === "completed" ? "outlined" : "contained"} color="secondary"
+                            onClick={() => handlerCreator(props.IDTodolist, "completed")}>Completed</Button>
                 </div>
                 <ul>
                     {tasksList}
