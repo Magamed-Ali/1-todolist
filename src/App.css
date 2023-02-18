@@ -6,6 +6,9 @@
 ul {
   padding: 0;
 }
+a {
+
+}
 
 .App > div {
   margin-right: 50px;
@@ -43,6 +46,7 @@ ul {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .todolist-title button{
@@ -65,11 +69,18 @@ ul {
 
 .footer{
   position: fixed;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   bottom: 0;
   width: 100%;
-  height: 60px;
+  height: 50px;
   background: rgba(25, 118, 210, 0.89);
-  text-align: center;
+  color: #add5f8;
+}
+
+.footer a{
+  color: #541010;
 }
 
 .footer-line{
@@ -78,4 +89,10 @@ ul {
   bottom: 10px;
   height: 2px;
   background: aliceblue;
+}
+
+.super-input{
+  margin-bottom: 20px;
+}.super-input button{
+   margin-top: 20px;
 }
