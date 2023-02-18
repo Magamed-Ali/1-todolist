@@ -1,4 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
+import TextField from '@mui/material/TextField';
 
 type SuperInputType = {
     inputAddTasks: (titleInput: string) => void
@@ -31,16 +34,27 @@ const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     }
 }
     return (
-        <div>
-            <input
+        <div className="super-input">
+            <TextField
+                id="standard-multiline-flexible"
+                label="New task"
+                multiline
+                maxRows={2}
+                variant="standard"
                 className={error ? "error-input" : ""}
                 value={titleInput}
-                onChange={(e) => onChangeHandler(e)}
-                onKeyDown={(e) => onKeyDownHandler(e)}
+                onChange={onChangeHandler}
+                onKeyDown={onKeyDownHandler}
             />
-            <button onClick={addTask}>+</button>
+            <Button
+                onClick={addTask}
+                variant="contained"
+                size="small"
+                style={{maxWidth: "40px", minWidth: "40px"}}
+                endIcon={<SendIcon style={{marginLeft: "-5px"}} />}>
+            </Button>
             {
-                error && <div className="errorRe">введите текст</div>
+                error && <div className="errorRe">Enter text</div>
             }
 
         </div>

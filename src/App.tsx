@@ -3,6 +3,8 @@ import {v1} from 'uuid';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import {SuperInpit} from "./components/SuperInpit";
+import {TopBar} from "./components/TopBar";
+import {Footer} from "./components/Footer";
 
 
 export  type FilterValueType = "all" | "active" | "completed"
@@ -110,42 +112,47 @@ function App() {
 
     }
     return (
-        <div className="App">
-            <SuperInpit inputAddTasks={AddTodolist} />
-            {
-                todoListTasks.map(el => {
+        <>
+            <TopBar/>
+            <div className="App">
+                <SuperInpit inputAddTasks={AddTodolist} />
+                {
+                    todoListTasks.map(el => {
 
-                    /*const filtredTasksForRender = getFilterTasksRender(task_1[el.id].data, task_1[el.id].filter);*/
-                    let filtredTasksForRender = task_1[el.id].data
-                    if(task_1[el.id].filter === "active"){
-                        filtredTasksForRender = task_1[el.id].data.filter((el)=>!el.isDone)
-                    }
-                    if(task_1[el.id].filter === "completed"){
-                        filtredTasksForRender = task_1[el.id].data.filter(el => el.isDone)
-                    }
+                        /*const filtredTasksForRender = getFilterTasksRender(task_1[el.id].data, task_1[el.id].filter);*/
+                        let filtredTasksForRender = task_1[el.id].data
+                        if(task_1[el.id].filter === "active"){
+                            filtredTasksForRender = task_1[el.id].data.filter((el)=>!el.isDone)
+                        }
+                        if(task_1[el.id].filter === "completed"){
+                            filtredTasksForRender = task_1[el.id].data.filter(el => el.isDone)
+                        }
 
 
-                    return (
-                        <TodoList
-                            key={el.id}
-                            IDTodolist={el.id}
-                            removeTask={removeTask}
-                            title={el.title}
-                            tasks={filtredTasksForRender}
-                            changeFilter={changeFilter}
-                            addDateTask={addDateTask}
-                            changeTaskStatus={changeTaskStatus}
-                            filter={task_1[el.id].filter}
-                            deleteTodolist={deleteTodolist}
-                            addTitleTask={addTitleTask}
-                            addDateTask2={addDateTask2}
-                        />
-                    )
-                })
-            }
+                        return (
+                            <TodoList
+                                key={el.id}
+                                IDTodolist={el.id}
+                                removeTask={removeTask}
+                                title={el.title}
+                                tasks={filtredTasksForRender}
+                                changeFilter={changeFilter}
+                                addDateTask={addDateTask}
+                                changeTaskStatus={changeTaskStatus}
+                                filter={task_1[el.id].filter}
+                                deleteTodolist={deleteTodolist}
+                                addTitleTask={addTitleTask}
+                                addDateTask2={addDateTask2}
+                            />
+                        )
+                    })
+                }
 
-            {/*<TodoList removeTask={removeTask} title={todoListTitle_2} tasks={task_2}/>*/}
-        </div>
+                {/*<TodoList removeTask={removeTask} title={todoListTitle_2} tasks={task_2}/>*/}
+            </div>
+            <Footer/>
+        </>
+
     );
 }
 

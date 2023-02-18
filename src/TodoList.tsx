@@ -1,5 +1,9 @@
 import React, {ChangeEvent, ChangeEventHandler, KeyboardEvent, useRef, useState} from 'react';
 import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import Checkbox from '@mui/material/Checkbox';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import {FilterValueType} from "./App";
 import {SuperInpit} from "./components/SuperInpit";
@@ -56,19 +60,24 @@ function TodoList(props: TodoListPropsType) {
                 props.addTitleTask(props.IDTodolist, task.id, title)
             }
             return (
-                <li key={task.id}>
+                <div key={task.id} className="todolist-tasks">
 
-                    <input type="checkbox" checked={task.isDone} onChange={changeStatusEvent}/>
-                    {/*<span className={task.isDone ? "task-done" : "task-doneOf"}>{task.title}</span>*/}
+                    <Checkbox
+                        checked={task.isDone}
+                        defaultChecked
+                        onChange={changeStatusEvent}
+                        style={{maxWidth: "35px", minWidth: "35px", height: "35px"}}
+                    />
                     <span className={task.isDone ? "task-done" : "task-doneOf"}>
                     <EditableSpan
                         title={task.title}
                         editTasksHandler={editTasksHandler}
                     />
                         </span>
-                    <button onClick={() => removeTask(props.IDTodolist, task.id)}>x
-                    </button>
-                </li>
+                    <IconButton aria-label="delete" size="small"  onClick={() => removeTask(props.IDTodolist, task.id)}>
+                        <DeleteIcon fontSize="inherit" style={{color: "601313BF"}}/>
+                    </IconButton>
+                </div>
             )
         })
         : <span>Your taskslist is empty</span>
@@ -101,7 +110,8 @@ function TodoList(props: TodoListPropsType) {
                     <h3>
                         <EditableSpan title={props.title} editTasksHandler={inputAddTodolistTitle}/>
                     </h3>
-                    <button onClick={() => props.deleteTodolist(props.IDTodolist)}>X</button>
+                    {/*<button onClick={() => props.deleteTodolist(props.IDTodolist)}><Icon color="primary" >add_circle</Icon></button>*/}
+                    <DeleteForeverIcon style={{color: "#3752c2", cursor: "pointer"}} onClick={() => props.deleteTodolist(props.IDTodolist)}/>
                 </div>
 
                 <SuperInpit inputAddTasks={inputAddTasks}/>
