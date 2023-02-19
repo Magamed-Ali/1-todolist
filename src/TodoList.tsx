@@ -82,9 +82,6 @@ function TodoList(props: TodoListPropsType) {
         })
         : <span>Your taskslist is empty</span>
 
-    ///
-
-    ////
 
     const handlerCreator = (IDTodolist: string, filter: FilterValueType) => {
         return props.changeFilter(props.IDTodolist, filter);
