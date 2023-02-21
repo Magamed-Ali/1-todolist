@@ -8,6 +8,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {FilterValueType} from "./App";
 import {SuperInpit} from "./components/SuperInpit";
 import {EditableSpan} from "./components/EditableSpan";
+import {Simulate} from "react-dom/test-utils";
+import select = Simulate.select;
 
 type TodoListPropsType = {
     IDTodolist: string
@@ -49,6 +51,9 @@ function TodoList(props: TodoListPropsType) {
     //         )
     //     })
     // }
+
+
+
 
     let removeTask = props.removeTask
 
