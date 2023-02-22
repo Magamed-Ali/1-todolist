@@ -10,6 +10,7 @@ import {SuperInpit} from "./components/SuperInpit";
 import {EditableSpan} from "./components/EditableSpan";
 import {Simulate} from "react-dom/test-utils";
 import select = Simulate.select;
+import SuperCheckBox from "./components/SuperCheckBox";
 
 type TodoListPropsType = {
     IDTodolist: string
@@ -57,22 +58,21 @@ function TodoList(props: TodoListPropsType) {
 
     let removeTask = props.removeTask
 
+    const changeStatusEvent = (task: string, check: boolean) => {
+        props.changeTaskStatus(props.IDTodolist, task, check)
+    }
 
     let tasksList = props.tasks.length
         ? props.tasks.map((task: TaskType) => {
-            const changeStatusEvent = (e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(props.IDTodolist, task.id, e.currentTarget.checked)
+
+
             const editTasksHandler = (title: string) => {
                 props.addTitleTask(props.IDTodolist, task.id, title)
             }
             return (
                 <div key={task.id} className="todolist-tasks">
+                    <SuperCheckBox task={task.isDone} callBack={(check) => changeStatusEvent(task.id, check)}/>
 
-                    <Checkbox
-                        checked={task.isDone}
-                        defaultChecked
-                        onChange={changeStatusEvent}
-                        style={{maxWidth: "35px", minWidth: "35px", height: "35px"}}
-                    />
                     <span className={task.isDone ? "task-done" : "task-doneOf"}>
                     <EditableSpan
                         title={task.title}
