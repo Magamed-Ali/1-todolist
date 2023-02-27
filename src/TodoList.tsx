@@ -34,7 +34,6 @@ export type TaskType = {
 
 function TodoList(props: TodoListPropsType) {
 
-
 /// Ref for input
     /* const ref = useRef<HTMLInputElement>(null)*/
 ////
@@ -54,8 +53,6 @@ function TodoList(props: TodoListPropsType) {
     // }
 
 
-
-
     let removeTask = props.removeTask
 
     const changeStatusEvent = (task: string, check: boolean) => {
@@ -64,7 +61,6 @@ function TodoList(props: TodoListPropsType) {
 
     let tasksList = props.tasks.length
         ? props.tasks.map((task: TaskType) => {
-
 
             const editTasksHandler = (title: string) => {
                 props.addTitleTask(props.IDTodolist, task.id, title)

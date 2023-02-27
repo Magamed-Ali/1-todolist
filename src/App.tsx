@@ -39,6 +39,7 @@ export type TaskType1 = {
 function App() {
     let TodoListID1 = v1();
     let TodolistID2 = v1();
+    let TodolistID3 = v1();
 
     /*const [todoListTasks, setTodoListTasks] = useState<Array<TodoTasksType>>([
         {id: TodoListID1, title: "What to learn"},
@@ -71,7 +72,8 @@ function App() {
 
     const [todoListTasks, todoListDispatch] = useReducer(todoListReducer, [
         {id: TodoListID1, title: "What to learn"},
-        {id: TodolistID2, title: "What to buy"}
+        {id: TodolistID2, title: "What to buy"},
+        {id: TodolistID3, title: "What to buy"}
     ])
 
     const [task_1, tasksDispatch] = useReducer(tasksReducer, {
@@ -88,18 +90,27 @@ function App() {
         },
         [TodolistID2]: {
             data: [
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "JS/TS", isDone: false},
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "HTML", isDone: false},
-                {id: v1(), title: "JS/TS", isDone: false}
+                {id: v1(), title: "HTML11", isDone: true},
+                {id: v1(), title: "HTML22", isDone: true},
+                {id: v1(), title: "JS/TS22", isDone: false},
+                {id: v1(), title: "HTML22", isDone: true},
+                {id: v1(), title: "HTML22", isDone: false},
+                {id: v1(), title: "JS/TS22", isDone: false}
             ],
             filter: "completed"
+        },
+        [TodolistID3]: {
+            data: [
+                {id: v1(), title: "HTML11", isDone: true},
+                {id: v1(), title: "HTML22", isDone: true},
+                {id: v1(), title: "JS/TS22", isDone: false},
+                {id: v1(), title: "HTML22", isDone: true},
+                {id: v1(), title: "HTML22", isDone: false},
+                {id: v1(), title: "JS/TS22", isDone: false}
+            ],
+            filter: "active"
         }
     })
-
-
 
     const addTitleTask = (IdTodoList : string, id: string, title: string) => {
         tasksDispatch(fixedTitleTask(IdTodoList, id, title))
@@ -135,16 +146,9 @@ function App() {
         /*setTask_1({...task_1, [idTodo]: {data: newDataTask, filter: "all"}})*/
     }
 
-
     const checkboxRemove = (IdIsDone: string, oppositeIsDone: boolean) => {
         /*setTask_1(task_1.map(t => t.id === IdIsDone ? {...t, isDone: oppositeIsDone} : t))*/
     }
-
-
-
-
-
-
 
     return (
         <>
@@ -162,7 +166,6 @@ function App() {
                         if(task_1[el.id].filter === "completed"){
                             filtredTasksForRender = task_1[el.id].data.filter(el => el.isDone)
                         }
-
 
                         return (
                             <TodoList
