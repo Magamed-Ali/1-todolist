@@ -1,18 +1,21 @@
 import {FilterValueType, TasksType, TaskType1} from "../App";
+import {v1} from "uuid";
+import {TypeAddTodoList} from "./todoListReducer";
 export const REMOVE_TASK_AC = "REMOVE-TASK-AC";
 export const FILTER_TASK = "FILTER-TASK";
 export const TASK_STATUS = "TASK-STATUS";
-export const ADD_TASKS = "ADD-TASKS";
+export const ADD_TODOLIST = "ADD_TODOLIST";
 export const TITLE_FIXED = "TITLE-FIXED";
+export const ADD_TASKS = "ADD_TASKS"
 export const NEW_ADD_TASK_TODO_LIST = "NEW-ADD-TASK-TODO-LIST"
 
-type TsarType = TypeRemove | TypeFilter | TypeStatus | TypeAddTasks | TypeFixedTitle | TypeAddNewTodoList
-type TypeRemove = ReturnType<typeof removeTaskType>
+type TsarType = TypeRemove | TypeFilter | TypeStatus  | TypeFixedTitle | TypeAddTodoList| TypeAddTasks
+type TypeRemove = ReturnType<typeof removeTaskTypeAC>
 type TypeFilter = ReturnType<typeof removeFilterAC>
-type TypeStatus = ReturnType<typeof changeStatus>
-type TypeAddTasks = ReturnType<typeof addTasks>
-type TypeFixedTitle = ReturnType<typeof fixedTitleTask>
-type TypeAddNewTodoList = ReturnType<typeof newAddTaskTodoList>
+type TypeStatus = ReturnType<typeof changeStatusAC>
+type TypeAddTasks = ReturnType<typeof addTasksAC>
+type TypeFixedTitle = ReturnType<typeof fixedTitleTaskAC>
+// type TypeAddNewTodoList = ReturnType<typeof newTodoList>
 export const tasksReducer = (state: TasksType, action: TsarType): TasksType => {
     switch (action.type) {
         case REMOVE_TASK_AC:
@@ -29,23 +32,29 @@ export const tasksReducer = (state: TasksType, action: TsarType): TasksType => {
                 ...state, [action.payload.IDTodolist] : {...state[action.payload.IDTodolist], data: [...state[action.payload.IDTodolist].data
                         .map(item => item.id === action.payload.taskId ? {...item, isDone: action.payload.newStatus} : item) ]}
             }
-        case ADD_TASKS:
-            return {
-                ...state, [action.payload.IDTodolist]: {...state[action.payload.IDTodolist], data: [...state[action.payload.IDTodolist].data, action.payload.newTask]}
-            }
+        case "ADD-TODO-LIST":
+
+            return {...state,[action.payload.idTodo] : {
+                data : [],
+                    filter: "all"
+                }}
         case TITLE_FIXED:
             return {
                 ...state, [action.payload.IdTodoList] : {...state[action.payload.IdTodoList], data: [...state[action.payload.IdTodoList].data
                     .map(item => item.id === action.payload.id ? {...item, title: action.payload.title} : item)]}
             }
-        case NEW_ADD_TASK_TODO_LIST:
-            return{...state, [action.payload.idTodo]: {data: action.payload.newDataTask, filter: "all"}}
+        case ADD_TASKS:
+            return {
+                ...state, [action.payload.IDTodolist]: {...state[action.payload.IDTodolist], data: [...state[action.payload.IDTodolist].data, action.payload.newTask]}
+            }
+        // case NEW_ADD_TASK_TODO_LIST:
+        //     return{...state, [action.payload.idTodo]: {data: action.payload.newDataTask, filter: "all"}}
 
         default: return state
     }
 }
 
-export const removeTaskType = (ID: string, taskId: string) => {
+export const removeTaskTypeAC = (ID: string, taskId: string) => {
     return {
         type: REMOVE_TASK_AC,
         payload: {
@@ -63,7 +72,7 @@ export const removeFilterAC = (IDTodolist: string, filter: FilterValueType) => {
         }
     } as const
 }
-export const changeStatus = (IDTodolist: string, taskId: string, newStatus: boolean) => {
+export const changeStatusAC = (IDTodolist: string, taskId: string, newStatus: boolean) => {
     return {
         type: TASK_STATUS,
         payload: {
@@ -73,7 +82,7 @@ export const changeStatus = (IDTodolist: string, taskId: string, newStatus: bool
         }
     } as const
 }
-export const addTasks = (IDTodolist: string, title: string, newTask: TaskType1) => {
+export const addTasksAC = (IDTodolist: string, title: string, newTask: TaskType1) => {
     return {
         type: ADD_TASKS,
         payload: {
@@ -83,7 +92,7 @@ export const addTasks = (IDTodolist: string, title: string, newTask: TaskType1) 
         }
     }as const
 }
-export const fixedTitleTask = (IdTodoList : string, id: string, title: string) => {
+export const fixedTitleTaskAC = (IdTodoList : string, id: string, title: string) => {
     return {
         type: TITLE_FIXED,
         payload: {
@@ -93,12 +102,11 @@ export const fixedTitleTask = (IdTodoList : string, id: string, title: string) =
         }
     } as const
 }
-export const newAddTaskTodoList = (idTodo: string, newDataTask: Array<TaskType1>) => {
-    return{
-        type: NEW_ADD_TASK_TODO_LIST,
-        payload: {
-            idTodo,
-            newDataTask
-        }
-    }as const
-}
+// export const addTodoList = (idTodo: string, title: string) => {
+//     return{
+//         type: ADD_TODOLIST,
+//         payload: {
+//             idTodo,
+//             title
+//         }
+//     }as const

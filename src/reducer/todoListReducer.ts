@@ -1,13 +1,14 @@
 import {TodoTasksType} from "../App";
+import {v1} from "uuid";
 
 export const ADD_TASK_LIST = "ADD-TASK-LIST";
 export const DELETE_TODO_LIST = "DELETE-TODO-LIST";
 export const ADD_TODO_LIST = "ADD-TODO-LIST";
 
 type ActionsType = TypeAddTaskList | TypeDeleteTodoList | TypeAddTodoList
-type TypeAddTaskList = ReturnType<typeof addDateTaskList>
-type TypeDeleteTodoList = ReturnType<typeof todoListDelete>
-type TypeAddTodoList = ReturnType<typeof addTodoList>
+type TypeAddTaskList = ReturnType<typeof addDateTaskListAC>
+type TypeDeleteTodoList = ReturnType<typeof todoListDeleteAC>
+export type TypeAddTodoList = ReturnType<typeof addTodoListAC>
 export const todoListReducer = (state: Array<TodoTasksType>, action: ActionsType): Array<TodoTasksType>  => {
     switch (action.type) {
         case ADD_TASK_LIST:
@@ -20,14 +21,14 @@ export const todoListReducer = (state: Array<TodoTasksType>, action: ActionsType
             return (
                 state.filter(el => el.id !== action.payload.IdIsDone)
             )
-        case "ADD-TODO-LIST":
-            return (
-                [...state, action.payload.newTasks]
-            )
+        case ADD_TODO_LIST:
+            const newTodo = { id: action.payload.idTodo, title : action.payload.title }
+            return [...state, newTodo]
+
         default: return state
     }
 }
-export const addDateTaskList = (IDTodolist: string, titleInput: string) => {
+export const addDateTaskListAC = (IDTodolist: string, titleInput: string) => {
     return {
         type: ADD_TASK_LIST,
         payload: {
@@ -36,7 +37,7 @@ export const addDateTaskList = (IDTodolist: string, titleInput: string) => {
         }
     }as const
 }
-export const todoListDelete = (IdIsDone: string) => {
+export const todoListDeleteAC = (IdIsDone: string) => {
     return {
         type: DELETE_TODO_LIST,
         payload: {
@@ -45,11 +46,12 @@ export const todoListDelete = (IdIsDone: string) => {
     }as const
 }
 
-export const addTodoList = (newTasks: TodoTasksType) => {
+export const addTodoListAC = (idTodo : string, title : string) => {
     return {
         type: ADD_TODO_LIST,
         payload: {
-            newTasks
+            idTodo,
+           title
         }
     }as const
 }
