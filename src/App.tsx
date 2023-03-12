@@ -132,13 +132,10 @@ function App() {
         tasksDispatch(addTodoListAC(idTodo, title))
     }
 
-    console.log(todoListTasks)
-    console.log(task_1)
 
-console.log(task_1)
+
     return (
         <>
-
             <TopBar/>
             <div className="App">
                 <SuperInpit inputAddTasks={AddTodolist} />
