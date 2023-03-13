@@ -15,6 +15,8 @@ import {
     tasksReducer
 } from "./reducer/tasksReducer";
 import {addDateTaskListAC, addTodoListAC, todoListDeleteAC, todoListReducer} from "./reducer/todoListReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {rootReducerType} from "./store/store";
 
 
 export  type FilterValueType = "all" | "active" | "completed"
@@ -22,7 +24,6 @@ export type TodoTasksType = {
     id: string
     title: string
 }
-
 export type TasksType = {
     [key: string]:
         {
@@ -30,78 +31,52 @@ export type TasksType = {
             filter: FilterValueType
         }
 }
-
 export type TaskType1 = {
     id: string,
     title: string,
     isDone: boolean
 }
-function App() {
+
+function AppWidthRedux() {
     let TodoListID1 = v1();
     let TodolistID2 = v1();
     let TodolistID3 = v1();
 
 
-    const [todoListTasks, todoListDispatch] = useReducer(todoListReducer, [
-        {id: TodoListID1, title: "What to learn"},
-        {id: TodolistID2, title: "What to buy"}
-    ])
+    let todoList = useSelector<rootReducerType, Array<TodoTasksType>>(state => state.todoListReducer);
+    let task = useSelector<rootReducerType, TasksType>(state => state.tasksReducer);
 
-    const [task_1, tasksDispatch] = useReducer(tasksReducer, {
-        [TodoListID1]: {
-            data: [
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "JS/TS", isDone: false},
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "HTML", isDone: false},
-                {id: v1(), title: "JS/TS", isDone: false}
-            ],
-            filter: "all"
-        },
-        [TodolistID2]: {
-            data: [
-                {id: v1(), title: "HTML11", isDone: true},
-                {id: v1(), title: "HTML22", isDone: true},
-                {id: v1(), title: "JS/TS22", isDone: false},
-                {id: v1(), title: "HTML22", isDone: true},
-                {id: v1(), title: "HTML22", isDone: false},
-                {id: v1(), title: "JS/TS22", isDone: false}
-            ],
-            filter: "completed"
-        }
-    })
+    const dispatch = useDispatch()
 
     const addTitleTask = (IdTodoList : string, id: string, title: string) => {
-        tasksDispatch(fixedTitleTaskAC(IdTodoList, id, title))
+        dispatch(fixedTitleTaskAC(IdTodoList, id, title))
     }
     const addDateTask = (IDTodolist: string, title: string) => {
         const newTask = {id: v1(), title: title, isDone: false}
-        tasksDispatch(addTasksAC(IDTodolist, title, newTask))
+        dispatch(addTasksAC(IDTodolist, title, newTask))
     }
     const changeTaskStatus = (IDTodolist: string, taskId: string, newStatus: boolean) => {
-        tasksDispatch(changeStatusAC(IDTodolist, taskId, newStatus))
+        dispatch(changeStatusAC(IDTodolist, taskId, newStatus))
     }
     const changeFilter = (IDTodolist: string, filter: FilterValueType) => {
-        tasksDispatch(removeFilterAC(IDTodolist, filter))
+        dispatch(removeFilterAC(IDTodolist, filter))
     }
     const removeTask = (IDTodolist: string, taskId: string) => {
-        tasksDispatch(removeTaskTypeAC(IDTodolist, taskId))
+        dispatch(removeTaskTypeAC(IDTodolist, taskId))
     }
 
     /////-----------------------------------------------
     const addDateTask2 = (IDTodolist: string, titleInput: string) => {
-        todoListDispatch(addDateTaskListAC(IDTodolist, titleInput))
+        dispatch(addDateTaskListAC(IDTodolist, titleInput))
     }
     const deleteTodolist = (IdIsDone: string) => {
-        todoListDispatch(todoListDeleteAC(IdIsDone))
-        delete task_1[IdIsDone]
+        dispatch(todoListDeleteAC(IdIsDone))
+        delete task[IdIsDone]
     }
     const AddTodolist = (title: string) => {
         let idTodo = v1();
+        dispatch(addTodoListAC(idTodo, title))
 
-        todoListDispatch(addTodoListAC(idTodo, title))
-        tasksDispatch(addTodoListAC(idTodo, title))
     }
 
 
@@ -112,15 +87,15 @@ function App() {
             <div className="App">
                 <SuperInpit inputAddTasks={AddTodolist} />
                 {
-                    todoListTasks.map(el => {
+                    todoList.map(el => {
 
                         /*const filtredTasksForRender = getFilterTasksRender(task_1[el.id].data, task_1[el.id].filter);*/
-                        let filtredTasksForRender = task_1[el.id].data
-                        if(task_1[el.id].filter === "active"){
-                            filtredTasksForRender = task_1[el.id].data.filter((el)=>!el.isDone)
+                        let filtredTasksForRender = task[el.id].data
+                        if(task[el.id].filter === "active"){
+                            filtredTasksForRender = task[el.id].data.filter((el)=>!el.isDone)
                         }
-                        if(task_1[el.id].filter === "completed"){
-                            filtredTasksForRender = task_1[el.id].data.filter(el => el.isDone)
+                        if(task[el.id].filter === "completed"){
+                            filtredTasksForRender = task[el.id].data.filter(el => el.isDone)
                         }
 
                         return (
@@ -133,7 +108,7 @@ function App() {
                                 changeFilter={changeFilter}
                                 addDateTask={addDateTask}
                                 changeTaskStatus={changeTaskStatus}
-                                filter={task_1[el.id].filter}
+                                filter={task[el.id].filter}
                                 deleteTodolist={deleteTodolist}
                                 addTitleTask={addTitleTask}
                                 addDateTask2={addDateTask2}
@@ -150,4 +125,4 @@ function App() {
     );
 }
 
-export default App;
+export default AppWidthRedux;

@@ -9,7 +9,9 @@ type ActionsType = TypeAddTaskList | TypeDeleteTodoList | TypeAddTodoList
 type TypeAddTaskList = ReturnType<typeof addDateTaskListAC>
 type TypeDeleteTodoList = ReturnType<typeof todoListDeleteAC>
 export type TypeAddTodoList = ReturnType<typeof addTodoListAC>
-export const todoListReducer = (state: Array<TodoTasksType>, action: ActionsType): Array<TodoTasksType>  => {
+
+const initialState: Array<TodoTasksType> = []
+export const todoListReducer = (state = initialState, action: ActionsType): Array<TodoTasksType>  => {
     switch (action.type) {
         case ADD_TASK_LIST:
             return (
@@ -45,7 +47,6 @@ export const todoListDeleteAC = (IdIsDone: string) => {
         }
     }as const
 }
-
 export const addTodoListAC = (idTodo : string, title : string) => {
     return {
         type: ADD_TODO_LIST,

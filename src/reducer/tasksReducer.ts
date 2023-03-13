@@ -16,7 +16,9 @@ type TypeStatus = ReturnType<typeof changeStatusAC>
 type TypeAddTasks = ReturnType<typeof addTasksAC>
 type TypeFixedTitle = ReturnType<typeof fixedTitleTaskAC>
 // type TypeAddNewTodoList = ReturnType<typeof newTodoList>
-export const tasksReducer = (state: TasksType, action: TsarType): TasksType => {
+
+const initialState: TasksType = {}
+export const tasksReducer = (state = initialState, action: TsarType): TasksType => {
     switch (action.type) {
         case REMOVE_TASK_AC:
             return {...state, [action.payload.ID] : {...state[action.payload.ID], data: [...state[action.payload.ID].data
