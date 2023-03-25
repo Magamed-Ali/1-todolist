@@ -1,4 +1,4 @@
-import {combineReducers, createStore} from "redux";
+import {combineReducers, createStore, legacy_createStore} from "redux";
 import {tasksReducer} from "../reducer/tasksReducer";
 import {todoListReducer} from "../reducer/todoListReducer";
 
@@ -9,6 +9,6 @@ const rootReducer = combineReducers({
     }
 )
 
-export const store = createStore(rootReducer)
+export const store = legacy_createStore(rootReducer)
 
-type StateType = ReturnType<typeof rootReducer>
+export type StateType = ReturnType<typeof rootReducer>
