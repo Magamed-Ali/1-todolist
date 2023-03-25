@@ -1,29 +1,23 @@
-import React, {ChangeEvent, ChangeEventHandler, KeyboardEvent, useRef, useState} from 'react';
+import React, {memo, useCallback} from 'react';
 import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
-import Checkbox from '@mui/material/Checkbox';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import {FilterValueType} from "./App";
 import {SuperInpit} from "./components/SuperInpit";
 import {EditableSpan} from "./components/EditableSpan";
 import {Simulate} from "react-dom/test-utils";
-import select = Simulate.select;
-import SuperCheckBox from "./components/SuperCheckBox";
+import {useDispatch, useSelector} from "react-redux";
+import {addTasksAC, changeStatusAC, removeFilterAC} from "./reducer/tasksReducer";
+import {v1} from "uuid";
+import {addDateTaskListAC, todoListDeleteAC} from "./reducer/todoListReducer";
+import {rootReducerType} from "./store/store";
+import {TaskType1} from "./AppWidthRedux";
+import {Task} from "./Task";
 
 type TodoListPropsType = {
     IDTodolist: string
     title: string,
-    filter: FilterValueType,
-    tasks: Array<TaskType>
-    removeTask: (IDTodolist: string, taskId: string) => void
-    changeFilter: (IDTodolist: string, filter: FilterValueType) => void
-    addDateTask: (IDTodolist: string, item: string) => void
-    deleteTodolist: (IdIsDone: string) => void
-    changeTaskStatus: (IDTodolist: string, id: string, status: boolean) => void
-    addTitleTask: (IdTodoList: string, id: string, title: string) => void
-    addDateTask2: (IDTodolist: string, titleInput: string) => void
+
 }
 
 export type TaskType = {
@@ -32,7 +26,7 @@ export type TaskType = {
     isDone: boolean
 }
 
-function TodoList(props: TodoListPropsType) {
+export const TodoList = memo((props: TodoListPropsType) => {
 
 /// Ref for input
     /* const ref = useRef<HTMLInputElement>(null)*/
@@ -52,48 +46,37 @@ function TodoList(props: TodoListPropsType) {
     //     })
     // }
 
+    let task = useSelector<rootReducerType, TaskType1[]>(state => state.tasksReducer[props.IDTodolist].data);
+    let filter = useSelector<rootReducerType, FilterValueType>(state => state.tasksReducer[props.IDTodolist].filter);
 
-    let removeTask = props.removeTask
+    const dispatch = useDispatch()
 
-    const changeStatusEvent = (task: string, check: boolean) => {
-        props.changeTaskStatus(props.IDTodolist, task, check)
+    const changeStatusEvent = useCallback((task: string, check: boolean) => {
+        dispatch(changeStatusAC(props.IDTodolist, task, check))
+    }, [props.IDTodolist])
+
+    if (filter === "active") {
+        task = task.filter(el => el.isDone === true)
+    }
+    if (filter === "completed") {
+        task = task.filter(el => el.isDone === false)
     }
 
-    let tasksList = props.tasks.length
-        ? props.tasks.map((task: TaskType) => {
 
-            const editTasksHandler = (title: string) => {
-                props.addTitleTask(props.IDTodolist, task.id, title)
-            }
-            return (
-                <div key={task.id} className="todolist-tasks">
-                    <SuperCheckBox task={task.isDone} callBack={(check) => changeStatusEvent(task.id, check)}/>
+    const handlerCreator = useCallback((IDTodolist: string, filter: FilterValueType) => {
+        console.log("handlerCreator")
+        dispatch(removeFilterAC(props.IDTodolist, filter))
+    }, [props.IDTodolist])
 
-                    <span className={task.isDone ? "task-done" : "task-doneOf"}>
-                    <EditableSpan
-                        title={task.title}
-                        editTasksHandler={editTasksHandler}
-                    />
-                        </span>
-                    <IconButton aria-label="delete" size="small"  onClick={() => removeTask(props.IDTodolist, task.id)}>
-                        <DeleteIcon fontSize="inherit" style={{color: "601313BF"}}/>
-                    </IconButton>
-                </div>
-            )
-        })
-        : <span>Your taskslist is empty</span>
-
-
-    const handlerCreator = (IDTodolist: string, filter: FilterValueType) => {
-        return props.changeFilter(props.IDTodolist, filter);
-    }
-    const inputAddTasks = (titleInput: string) => {
-        props.addDateTask(props.IDTodolist, titleInput)
-    }
-    const inputAddTodolistTitle = (titleInput: string) => {
-        props.addDateTask2(props.IDTodolist, titleInput)
-    }
-
+    const inputAddTasks = useCallback((titleInput: string) => {
+        console.log("inputAddTasks")
+        const newTask = {id: v1(), title: titleInput, isDone: false}
+        dispatch(addTasksAC(props.IDTodolist, titleInput, newTask))
+    }, [props.IDTodolist])
+    const inputAddTodolistTitle = useCallback((titleInput: string) => {
+        console.log("inputAddTodolistTitle")
+        dispatch(addDateTaskListAC(props.IDTodolist, titleInput))
+    },[props.IDTodolist])
     const button = {
         padding: "1px 4px",
         minWidth: "50px",
@@ -109,7 +92,10 @@ function TodoList(props: TodoListPropsType) {
                         <EditableSpan title={props.title} editTasksHandler={inputAddTodolistTitle}/>
                     </h3>
                     {/*<button onClick={() => props.deleteTodolist(props.IDTodolist)}><Icon color="primary" >add_circle</Icon></button>*/}
-                    <DeleteForeverIcon style={{color: "#3752c2", cursor: "pointer"}} onClick={() => props.deleteTodolist(props.IDTodolist)}/>
+                    <DeleteForeverIcon style={{color: "#3752c2", cursor: "pointer"}} onClick={() => {
+                        dispatch(todoListDeleteAC(props.IDTodolist))
+                        //delete task[props.IDTodolist]
+                    }}/>
                 </div>
 
                 <SuperInpit inputAddTasks={inputAddTasks}/>
@@ -144,19 +130,35 @@ function TodoList(props: TodoListPropsType) {
                 </div>*/}
 
                 <div>
-                    <Button style={button} variant={props.filter === "all" ? "outlined" : "contained"} color="primary"
+                    <Button style={button} variant={filter === "all" ? "outlined" : "contained"}
+                            color="primary"
                             onClick={() => handlerCreator(props.IDTodolist, "all")}>All</Button>
-                    <Button style={button} variant={props.filter === "active" ? "outlined" : "contained"} color="success"
+                    <Button style={button}
+                            variant={filter === "active" ? "outlined" : "contained"}
+                            color="success"
                             onClick={() => handlerCreator(props.IDTodolist, "active")}>Active</Button>
-                    <Button style={button} variant={props.filter === "completed" ? "outlined" : "contained"} color="secondary"
+                    <Button style={button}
+                            variant={filter === "completed" ? "outlined" : "contained"}
+                            color="secondary"
                             onClick={() => handlerCreator(props.IDTodolist, "completed")}>Completed</Button>
                 </div>
+
                 <ul>
-                    {tasksList}
+                    {task.length
+                        ? task.map((task: TaskType) => {
+                            return (
+                                <Task
+                                    key={task.id}
+                                    task={task}
+                                    IDTodolist={props.IDTodolist}
+                                    changeStatusEvent={changeStatusEvent}
+                                    />
+                            )
+                        })
+                        : <span>Your taskslist is empty</span>}
                 </ul>
             </div>
         </div>
     );
-}
+})
 
-export default TodoList;

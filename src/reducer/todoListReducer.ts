@@ -7,7 +7,7 @@ export const ADD_TODO_LIST = "ADD-TODO-LIST";
 
 type ActionsType = TypeAddTaskList | TypeDeleteTodoList | TypeAddTodoList
 type TypeAddTaskList = ReturnType<typeof addDateTaskListAC>
-type TypeDeleteTodoList = ReturnType<typeof todoListDeleteAC>
+export type TypeDeleteTodoList = ReturnType<typeof todoListDeleteAC>
 export type TypeAddTodoList = ReturnType<typeof addTodoListAC>
 
 const initialState: Array<TodoTasksType> = []

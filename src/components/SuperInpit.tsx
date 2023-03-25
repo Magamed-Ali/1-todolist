@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import TextField from '@mui/material/TextField';
@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 type SuperInputType = {
     inputAddTasks: (titleInput: string) => void
 }
-export function SuperInpit(props: SuperInputType){
+export const SuperInpit = memo((props: SuperInputType) => {
 
 const [titleInput, setTitle] = useState('')
 const [error, setError] = useState<boolean>(false)
@@ -59,4 +59,4 @@ const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
 
         </div>
     );
-}
+})

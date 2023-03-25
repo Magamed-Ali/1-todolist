@@ -1,28 +1,31 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, memo, useCallback, useState} from 'react';
 
 type SpanType = {
     title: string
     editTasksHandler: (title: string)=> void
 }
 
-export function EditableSpan(props: SpanType) {
+export const EditableSpan = memo(function (props: SpanType) {
+    console.log("EditableSpan")
 
     const [edit, setEdit] = useState<boolean>(false)
     const [title, setTitle] = useState(props.title)
-    const ediFoolHandler = () => {
+
+    const ediFoolHandler = useCallback(() => {
         setEdit(!edit)
         props.editTasksHandler(title)
-    }
+    }, [])
+
     const changeInput = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
-    const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    const onKeyDownHandler = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
 
         if(e.key === "Enter"){
             props.editTasksHandler(title)
             setEdit(false)
         }
-    }
+    }, [])
     return (
         <>
             {edit ? <input
@@ -35,5 +38,5 @@ export function EditableSpan(props: SpanType) {
             }
         </>
     );
-}
+})
 

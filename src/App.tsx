@@ -1,13 +1,11 @@
 import React, {useReducer, useState} from 'react';
 import {v1} from 'uuid';
 import './App.css';
-import TodoList from "./TodoList";
 import {SuperInpit} from "./components/SuperInpit";
 import {TopBar} from "./components/TopBar";
 import {Footer} from "./components/Footer";
 import {
     addTasksAC,
-
     changeStatusAC,
     fixedTitleTaskAC,
     removeFilterAC,
@@ -15,6 +13,9 @@ import {
     tasksReducer
 } from "./reducer/tasksReducer";
 import {addDateTaskListAC, addTodoListAC, todoListDeleteAC, todoListReducer} from "./reducer/todoListReducer";
+import {useSelector} from "react-redux";
+import {rootReducerType} from "./store/store";
+import {TodoList} from "./TodoList";
 
 
 export  type FilterValueType = "all" | "active" | "completed"
@@ -37,6 +38,8 @@ export type TaskType1 = {
     isDone: boolean
 }
 function App() {
+
+    let task = useSelector<rootReducerType, TasksType>(state => state.tasksReducer);
     let TodoListID1 = v1();
     let TodolistID2 = v1();
     let TodolistID3 = v1();
@@ -115,28 +118,28 @@ function App() {
                     todoListTasks.map(el => {
 
                         /*const filtredTasksForRender = getFilterTasksRender(task_1[el.id].data, task_1[el.id].filter);*/
-                        let filtredTasksForRender = task_1[el.id].data
+                        /*let filtredTasksForRender = task_1[el.id].data
                         if(task_1[el.id].filter === "active"){
                             filtredTasksForRender = task_1[el.id].data.filter((el)=>!el.isDone)
                         }
                         if(task_1[el.id].filter === "completed"){
                             filtredTasksForRender = task_1[el.id].data.filter(el => el.isDone)
-                        }
+                        }*/
 
                         return (
                             <TodoList
                                 key={el.id}
                                 IDTodolist={el.id}
-                                removeTask={removeTask}
+                                /*removeTask={removeTask}*/
                                 title={el.title}
-                                tasks={filtredTasksForRender}
-                                changeFilter={changeFilter}
+                                /*allTodoListTasks={task[el.id].data}*/
+                                /*changeFilter={changeFilter}
                                 addDateTask={addDateTask}
-                                changeTaskStatus={changeTaskStatus}
-                                filter={task_1[el.id].filter}
-                                deleteTodolist={deleteTodolist}
+                                changeTaskStatus={changeTaskStatus}*/
+                                /*filter={task_1[el.id].filter}*/
+                                /*deleteTodolist={deleteTodolist}
                                 addTitleTask={addTitleTask}
-                                addDateTask2={addDateTask2}
+                                addDateTask2={addDateTask2}*/
                             />
                         )
                     })

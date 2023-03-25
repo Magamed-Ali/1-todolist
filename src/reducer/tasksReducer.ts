@@ -1,6 +1,7 @@
 import {FilterValueType, TasksType, TaskType1} from "../App";
 import {v1} from "uuid";
-import {TypeAddTodoList} from "./todoListReducer";
+import {TypeAddTodoList, TypeDeleteTodoList} from "./todoListReducer";
+
 export const REMOVE_TASK_AC = "REMOVE-TASK-AC";
 export const FILTER_TASK = "FILTER-TASK";
 export const TASK_STATUS = "TASK-STATUS";
@@ -9,7 +10,14 @@ export const TITLE_FIXED = "TITLE-FIXED";
 export const ADD_TASKS = "ADD_TASKS"
 export const NEW_ADD_TASK_TODO_LIST = "NEW-ADD-TASK-TODO-LIST"
 
-type TsarType = TypeRemove | TypeFilter | TypeStatus  | TypeFixedTitle | TypeAddTodoList| TypeAddTasks
+type TsarType =
+    TypeRemove
+    | TypeFilter
+    | TypeStatus
+    | TypeFixedTitle
+    | TypeAddTodoList
+    | TypeAddTasks
+    | TypeDeleteTodoList
 type TypeRemove = ReturnType<typeof removeTaskTypeAC>
 type TypeFilter = ReturnType<typeof removeFilterAC>
 type TypeStatus = ReturnType<typeof changeStatusAC>
@@ -21,38 +29,58 @@ const initialState: TasksType = {}
 export const tasksReducer = (state = initialState, action: TsarType): TasksType => {
     switch (action.type) {
         case REMOVE_TASK_AC:
-            return {...state, [action.payload.ID] : {...state[action.payload.ID], data: [...state[action.payload.ID].data
-            .filter(el => el.id !== action.payload.taskId)] }
+            return {
+                ...state, [action.payload.ID]: {
+                    ...state[action.payload.ID], data: [...state[action.payload.ID].data
+                        .filter(el => el.id !== action.payload.taskId)]
+                }
             }
         case FILTER_TASK:
             return {
                 ...state, [action.payload.IDTodolist]: {
-                    ...state[action.payload.IDTodolist], filter: action.payload.filter}
+                    ...state[action.payload.IDTodolist], filter: action.payload.filter
+                }
             }
         case TASK_STATUS:
             return {
-                ...state, [action.payload.IDTodolist] : {...state[action.payload.IDTodolist], data: [...state[action.payload.IDTodolist].data
-                        .map(item => item.id === action.payload.taskId ? {...item, isDone: action.payload.newStatus} : item) ]}
+                ...state, [action.payload.IDTodolist]: {
+                    ...state[action.payload.IDTodolist], data: [...state[action.payload.IDTodolist].data
+                        .map(item => item.id === action.payload.taskId ? {
+                            ...item,
+                            isDone: action.payload.newStatus
+                        } : item)]
+                }
             }
         case "ADD-TODO-LIST":
 
-            return {...state,[action.payload.idTodo] : {
-                data : [],
+            return {
+                ...state, [action.payload.idTodo]: {
+                    data: [],
                     filter: "all"
-                }}
+                }
+            }
+        case "DELETE-TODO-LIST":
+            delete state[action.payload.IdIsDone];
+            return state;
+
         case TITLE_FIXED:
             return {
-                ...state, [action.payload.IdTodoList] : {...state[action.payload.IdTodoList], data: [...state[action.payload.IdTodoList].data
-                    .map(item => item.id === action.payload.id ? {...item, title: action.payload.title} : item)]}
+                ...state, [action.payload.IdTodoList]: {
+                    ...state[action.payload.IdTodoList], data: [...state[action.payload.IdTodoList].data
+                        .map(item => item.id === action.payload.id ? {...item, title: action.payload.title} : item)]
+                }
             }
         case ADD_TASKS:
             return {
-                ...state, [action.payload.IDTodolist]: {...state[action.payload.IDTodolist], data: [...state[action.payload.IDTodolist].data, action.payload.newTask]}
+                ...state, [action.payload.IDTodolist]: {...state[action.payload.IDTodolist],
+                    data: [...state[action.payload.IDTodolist].data, action.payload.newTask]
+                }
             }
         // case NEW_ADD_TASK_TODO_LIST:
         //     return{...state, [action.payload.idTodo]: {data: action.payload.newDataTask, filter: "all"}}
 
-        default: return state
+        default:
+            return state
     }
 }
 
@@ -63,7 +91,7 @@ export const removeTaskTypeAC = (ID: string, taskId: string) => {
             ID: ID,
             taskId: taskId
         }
-    }as const
+    } as const
 }
 export const removeFilterAC = (IDTodolist: string, filter: FilterValueType) => {
     return {
@@ -92,9 +120,9 @@ export const addTasksAC = (IDTodolist: string, title: string, newTask: TaskType1
             title,
             newTask
         }
-    }as const
+    } as const
 }
-export const fixedTitleTaskAC = (IdTodoList : string, id: string, title: string) => {
+export const fixedTitleTaskAC = (IdTodoList: string, id: string, title: string) => {
     return {
         type: TITLE_FIXED,
         payload: {
