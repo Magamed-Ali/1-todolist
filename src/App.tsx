@@ -16,13 +16,11 @@ import {
 } from "./reducer/tasksReducer";
 import {addDateTaskListAC, addTodoListAC, todoListDeleteAC, todoListReducer} from "./reducer/todoListReducer";
 
-
 export  type FilterValueType = "all" | "active" | "completed"
 export type TodoTasksType = {
     id: string
     title: string
 }
-
 export type TasksType = {
     [key: string]:
         {
@@ -30,7 +28,6 @@ export type TasksType = {
             filter: FilterValueType
         }
 }
-
 export type TaskType1 = {
     id: string,
     title: string,
@@ -40,35 +37,6 @@ function App() {
     let TodoListID1 = v1();
     let TodolistID2 = v1();
     let TodolistID3 = v1();
-
-    /*const [todoListTasks, setTodoListTasks] = useState<Array<TodoTasksType>>([
-        {id: TodoListID1, title: "What to learn"},
-        {id: TodolistID2, title: "What to buy"}
-    ])*/
-    /*const [task_1, setTask_1] = useState<TasksType>({
-        [TodoListID1]: {
-            data: [
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "JS/TS", isDone: false},
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "HTML", isDone: false},
-                {id: v1(), title: "JS/TS", isDone: false}
-            ],
-            filter: "all"
-        },
-        [TodolistID2]: {
-            data: [
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "JS/TS", isDone: false},
-                {id: v1(), title: "HTML", isDone: true},
-                {id: v1(), title: "HTML", isDone: false},
-                {id: v1(), title: "JS/TS", isDone: false}
-            ],
-            filter: "completed"
-        }
-    })*/
 
     const [todoListTasks, todoListDispatch] = useReducer(todoListReducer, [
         {id: TodoListID1, title: "What to learn"},
