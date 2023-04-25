@@ -16,7 +16,29 @@ type TypeStatus = ReturnType<typeof changeStatusAC>
 type TypeAddTasks = ReturnType<typeof addTasksAC>
 type TypeFixedTitle = ReturnType<typeof fixedTitleTaskAC>
 // type TypeAddNewTodoList = ReturnType<typeof newTodoList>
-export const tasksReducer = (state: TasksType, action: TsarType): TasksType => {
+
+export let TodoListID1 = v1();
+export let TodolistID2 = v1();
+let initialState: TasksType = {
+    [TodoListID1]: {
+        data: [
+            {id: v1(), title: "HTML", isDone: true},
+            {id: v1(), title: "HTML", isDone: true},
+            {id: v1(), title: "JS/TS", isDone: false},
+
+        ],
+        filter: "all"
+    },
+    [TodolistID2]: {
+        data: [
+            {id: v1(), title: "HTML11", isDone: true},
+            {id: v1(), title: "HTML22", isDone: true},
+            {id: v1(), title: "JS/TS22", isDone: false},
+        ],
+        filter: "completed"
+    }
+}
+export const tasksReducer = (state = initialState, action: TsarType): TasksType => {
     switch (action.type) {
         case REMOVE_TASK_AC:
             return {...state, [action.payload.ID] : {...state[action.payload.ID], data: [...state[action.payload.ID].data
