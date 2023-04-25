@@ -25,9 +25,7 @@ let initialState: TasksType = {
             {id: v1(), title: "HTML", isDone: true},
             {id: v1(), title: "HTML", isDone: true},
             {id: v1(), title: "JS/TS", isDone: false},
-            {id: v1(), title: "HTML", isDone: true},
-            {id: v1(), title: "HTML", isDone: false},
-            {id: v1(), title: "JS/TS", isDone: false}
+
         ],
         filter: "all"
     },
@@ -36,9 +34,6 @@ let initialState: TasksType = {
             {id: v1(), title: "HTML11", isDone: true},
             {id: v1(), title: "HTML22", isDone: true},
             {id: v1(), title: "JS/TS22", isDone: false},
-            {id: v1(), title: "HTML22", isDone: true},
-            {id: v1(), title: "HTML22", isDone: false},
-            {id: v1(), title: "JS/TS22", isDone: false}
         ],
         filter: "completed"
     }
